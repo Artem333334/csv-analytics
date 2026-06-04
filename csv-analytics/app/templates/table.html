@@ -1,3 +1,10 @@
+<h3>Статистика файла</h3>
+
+<ul>
+    <li>Строк: {{ stats.rows }}</li>
+    <li>Столбцов: {{ stats.columns }}</li>
+    <li>Пустых значений: {{ stats.missing }}</li>
+</ul>
 {% extends 'base.html' %}
 
 {% block content %}
