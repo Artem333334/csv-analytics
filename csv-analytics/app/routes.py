@@ -66,3 +66,6 @@ def pdf():
     doc.build(content)
 
     return send_file(pdf_file, as_attachment=True)
+df = df.sort_values(df.columns[0])
+maximum = df.max(numeric_only=True)
+minimum = df.min(numeric_only=True)
