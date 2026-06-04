@@ -44,7 +44,8 @@ stats = {
         return render_template(
             'table.html',
             table=table,
-            chart=chart
+            chart=chart,
+            stats=stats
         )
 
     return redirect('/')
