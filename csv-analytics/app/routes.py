@@ -1,6 +1,8 @@
 import os
 import pandas as pd
-
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from flask import send_file
 from flask import Blueprint, render_template, request, redirect
 
 from analysis import build_chart
@@ -25,7 +27,16 @@ def upload():
         file.save(path)
 
         df = pd.read_csv(path)
+rows = len(df)
+cols = len(df.columns)
 
+missing = df.isnull().sum().sum()
+
+stats = {
+    "rows": rows,
+    "columns": cols,
+    "missing": missing
+}
         table = df.head(20).to_html(classes='table table-striped')
 
         chart = build_chart(df)
@@ -37,3 +48,20 @@ def upload():
         )
 
     return redirect('/')
+@main.route('/pdf')
+def pdf():
+
+    pdf_file = "report.pdf"
+
+    doc = SimpleDocTemplate(pdf_file)
+
+    styles = getSampleStyleSheet()
+
+    content = [
+        Paragraph("CSV Analytics Report", styles['Title']),
+        Paragraph("Generated automatically", styles['BodyText'])
+    ]
+
+    doc.build(content)
+
+    return send_file(pdf_file, as_attachment=True)
